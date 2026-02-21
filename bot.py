@@ -17,26 +17,34 @@ def log(msg):
     print(f"[{time.strftime('%H:%M:%S')}] {msg}")
     sys.stdout.flush()
 
+# ===== ПОЛУЧАЕМ ПЕРЕМЕННЫЕ ИЗ ОКРУЖЕНИЯ =====
+log("🔍 Загружаем переменные окружения...")
+
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 ADMIN_ID = os.environ.get('ADMIN_ID')
 
 if not BOT_TOKEN:
     log("❌ ОШИБКА: BOT_TOKEN не найден в переменных окружения")
+    log("📌 Проверь Variables на Railway:")
+    log("   1. BOT_TOKEN должен быть добавлен")
+    log("   2. Значение должно быть без кавычек")
+    log("   3. После добавления нужно Redeploy")
     exit(1)
 
 if not ADMIN_ID:
     log("❌ ОШИБКА: ADMIN_ID не найден в переменных окружения")
+    log("📌 Добавь ADMIN_ID в Variables на Railway")
     exit(1)
 
-log("✅ Токен загружен из окружения")
+log(f"✅ Токен загружен: {BOT_TOKEN[:10]}...")
+log(f"✅ Admin ID загружен: {ADMIN_ID}")
 log("🚀 Бот запускается...")
+
+bot = telebot.TeleBot(BOT_TOKEN)
 
 # ===== ХРАНИЛИЩА =====
 user_filters = {}
 user_search_results = {}
-
-log(f"✅ Токен: {BOT_TOKEN[:10]}...")
-bot = telebot.TeleBot(BOT_TOKEN)
 
 # ===== КАТЕГОРИИ =====
 CATEGORIES = {
@@ -93,9 +101,9 @@ def parse_category(url, limit=100, chat_id=None):
             log("⏱️ Товары не загрузились")
             return []
         
-        # Берём ТОЛЬКО ПЕРВЫЕ 500 товаров (остальное не нужно)
+        # Берём первые 500 товаров
         all_items = driver.find_elements(By.CLASS_NAME, "tc-item")
-        items = all_items[:500]  # ← вот это главное изменение
+        items = all_items[:500]
         log(f"🔎 Всего на странице: {len(all_items)}, берём первые {len(items)}")
         
         filters = user_filters.get(chat_id, {'max_reviews': 999999, 'max_days': 999999})
@@ -336,6 +344,7 @@ def handle_private(message):
     user_search_results[message.chat.id] = results
     bot.delete_message(message.chat.id, sent.message_id)
     send_page(message.chat.id, None, 1, results)
+
 # ===== КНОПКИ =====
 @bot.callback_query_handler(func=lambda call: call.data.startswith('page_'))
 def page_callback(call):
@@ -406,5 +415,3 @@ if __name__ == "__main__":
         except Exception as e:
             log(f"❌ Ошибка: {e}")
             time.sleep(5)
-
-
