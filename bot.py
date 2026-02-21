@@ -23,8 +23,6 @@ user_filters = {}
 user_search_results = {}
 
 # ===== ТВОИ ДАННЫЕ =====
-BOT_TOKEN = '8561754542:AAF4gbVvemiagKv_L5QXU6bjHWJH36fPE_c'
-ADMIN_ID = 7015434265
 log(f"✅ Токен: {BOT_TOKEN[:10]}...")
 # =======================
 
@@ -398,3 +396,4 @@ if __name__ == "__main__":
         except Exception as e:
             log(f"❌ Ошибка: {e}")
             time.sleep(5)
+
