@@ -10,35 +10,20 @@ import time
 import re
 import sys
 from telebot import types
-import os
+
+# ===== ТВОИ ДАННЫЕ (ВПИСАНЫ ВРУЧНУЮ) =====
+BOT_TOKEN = '8561754542:AAF4gbVvemiagKv_L5QXU6bjHWJH36fPE_c'
+ADMIN_ID = 7015434265
+# ==========================================
 
 # ===== ЛОГИРОВАНИЕ =====
 def log(msg):
     print(f"[{time.strftime('%H:%M:%S')}] {msg}")
     sys.stdout.flush()
 
-# ===== ПОЛУЧАЕМ ПЕРЕМЕННЫЕ ИЗ ОКРУЖЕНИЯ =====
-log("🔍 Загружаем переменные окружения...")
-
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
-ADMIN_ID = os.environ.get('ADMIN_ID')
-
-if not BOT_TOKEN:
-    log("❌ ОШИБКА: BOT_TOKEN не найден в переменных окружения")
-    log("📌 Проверь Variables на Railway:")
-    log("   1. BOT_TOKEN должен быть добавлен")
-    log("   2. Значение должно быть без кавычек")
-    log("   3. После добавления нужно Redeploy")
-    exit(1)
-
-if not ADMIN_ID:
-    log("❌ ОШИБКА: ADMIN_ID не найден в переменных окружения")
-    log("📌 Добавь ADMIN_ID в Variables на Railway")
-    exit(1)
-
-log(f"✅ Токен загружен: {BOT_TOKEN[:10]}...")
-log(f"✅ Admin ID загружен: {ADMIN_ID}")
 log("🚀 Бот запускается...")
+log(f"✅ Токен: {BOT_TOKEN[:10]}...")
+log(f"✅ Admin ID: {ADMIN_ID}")
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
