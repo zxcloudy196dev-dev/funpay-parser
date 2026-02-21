@@ -10,22 +10,32 @@ import time
 import re
 import sys
 from telebot import types
+import os
 
 # ===== ЛОГИРОВАНИЕ =====
 def log(msg):
     print(f"[{time.strftime('%H:%M:%S')}] {msg}")
     sys.stdout.flush()
 
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+ADMIN_ID = os.environ.get('ADMIN_ID')
+
+if not BOT_TOKEN:
+    log("❌ ОШИБКА: BOT_TOKEN не найден в переменных окружения")
+    exit(1)
+
+if not ADMIN_ID:
+    log("❌ ОШИБКА: ADMIN_ID не найден в переменных окружения")
+    exit(1)
+
+log("✅ Токен загружен из окружения")
 log("🚀 Бот запускается...")
 
 # ===== ХРАНИЛИЩА =====
 user_filters = {}
 user_search_results = {}
 
-# ===== ТВОИ ДАННЫЕ =====
 log(f"✅ Токен: {BOT_TOKEN[:10]}...")
-# =======================
-
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # ===== КАТЕГОРИИ =====
@@ -396,4 +406,5 @@ if __name__ == "__main__":
         except Exception as e:
             log(f"❌ Ошибка: {e}")
             time.sleep(5)
+
 
